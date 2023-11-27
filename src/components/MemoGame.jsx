@@ -31,28 +31,30 @@ const MemoGame = ({ pairs, onGameOver }) => {
     }
 
     if (storedCards && JSON.parse(storedCards).length > 0) {
-      const loadedCards = JSON.parse(storedCards);
+     const loadedCards = JSON.parse(storedCards);
 
+      // Obtener las image_url de las cartas que ya tienen su par volteado
       const flippedPairs = loadedCards
         .filter((card) => card.isMatched && card.isFlipped)
         .map((card) => card.image_url);
-    
+
+      // Establecer isFlipped en false para aquellas cartas cuyo par no está volteado
       const updatedCards = loadedCards.map((card) => {
         if (!card.isMatched && !flippedPairs.includes(card.image_url)) {
           return { ...card, isFlipped: false };
         }
         return card;
       });
-    
+
       setCards(updatedCards);
     } else {
+      // Otherwise, generate new cards for this specific gameId
       const newCards = generateCards();
+      // Update the state and store it in localStorage
       setCards(newCards);
       localStorage.setItem(`memoGameCards_${gameId}`, JSON.stringify(newCards));
     }
-  }, [gameId,action, loading, error,data]);
-  
-  
+  }, [gameId,action]);
 
   useEffect(() => {
     // Save the current state of cards in localStorage

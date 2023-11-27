@@ -56,6 +56,17 @@ const MemoTestList = ({ memoTests }) => {
       </div>
     )
   }
+
+  const ScoreComponent = ({ onMemoTest }) => {
+    if (!onMemoTest.scoreMax) return null; 
+  
+    return (
+      <div className='memo-test-score'>
+        Max score: {onMemoTest.scoreMax.score}
+      </div>
+    );
+  };
+  
     
   return (
     <div className="memo-test-list">
@@ -66,9 +77,8 @@ const MemoTestList = ({ memoTests }) => {
             <button onClick={() => handleSession(memoTest.id)}>
               {localStorage.getItem(`memoTestSession_${memoTest.id}`) ? `Continue` : 'Start New'}
             </button>
-            <div className='memo-test-score'>
-              Max score: {memoTest.scoreMax.score}
-            </div>
+            <ScoreComponent onMemoTest={memoTest}/>
+            
           </li>
         ))}
       </ul>

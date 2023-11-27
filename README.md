@@ -7,6 +7,9 @@ Welcome to the Memory Game project! This simple memory game allows players to ma
 - Node.js installed
 - Yarn package manager installed
 
+## Download repository:
+
+    git clone https://github.com/diegomottadev/memo-test.
 
 ## Navigate to the frontend directory:
 

@@ -1,0 +1,43 @@
+.center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Esto ocupa el 100% de la altura de la ventana */
+  }
+  
+  .round-progress-bar {
+    position: relative;
+    width: 100px;
+    height: 100px;
+  }
+  
+  .loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  
+  .spinner {
+    border: 8px solid rgba(0, 188, 212, 0.3);
+    border-radius: 50%;
+    border-top: 8px solid #00bcd4;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+  }
+  
+  .text {
+    margin-top: 10px;
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: #f7f7f7;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  

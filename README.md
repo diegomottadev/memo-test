@@ -9,7 +9,7 @@ Welcome to the Memory Game project! This simple memory game allows players to ma
 
 ## Download repository:
 
-    git clone https://github.com/diegomottadev/memo-test.
+    git clone https://github.com/diegomottadev/memo-test
 
 ## Navigate to the frontend directory:
 

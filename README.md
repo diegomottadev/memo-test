@@ -1,34 +1,35 @@
 # Memo Test
 
-Juego de memoria: elegís un memo test, das vuelta cartas de a dos y buscás los pares de imágenes. Cada click cuenta como un intento; una partida perfecta vale 100 puntos. Las partidas se pueden dejar a medias y continuar después.
+A memory game. You pick a memo test, turn over 2 cards at a time and look for matching pictures. Every click counts as 1 try, and a perfect game scores 100. You can stop a game and finish it later.
 
-Este repo es el frontend. El backend (Laravel + GraphQL + MySQL) está en [api-memo-test](https://github.com/diegomottadev/api-memo-test). **El backend es opcional**: sin él, o si no responde, la app usa datos de ejemplo y funciona completa.
+This repo is the frontend. The backend (Laravel, GraphQL and MySQL) lives in [api-memo-test](https://github.com/diegomottadev/api-memo-test).
 
-Demo: https://diegomottadev.github.io/memo-test/ (modo demo, con datos de ejemplo).
+The backend is optional. Without it, or when it doesn't answer, the app plays with sample data.
 
-## Capturas
+Live demo: https://diegomottadev.github.io/memo-test/ (sample data).
 
-|         | Claro                                                               | Oscuro                                                              |
-| ------- | ------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| Desktop | ![Inicio, claro, desktop](docs/screenshots/home-light-desktop.png)  | ![Inicio, oscuro, desktop](docs/screenshots/home-dark-desktop.png)  |
-| Desktop | ![Partida, claro, desktop](docs/screenshots/game-light-desktop.png) | ![Partida, oscuro, desktop](docs/screenshots/game-dark-desktop.png) |
-| Mobile  | ![Inicio, claro, mobile](docs/screenshots/home-light-mobile.png)    | ![Inicio, oscuro, mobile](docs/screenshots/home-dark-mobile.png)    |
-| Mobile  | ![Partida, claro, mobile](docs/screenshots/game-light-mobile.png)   | ![Partida, oscuro, mobile](docs/screenshots/game-dark-mobile.png)   |
+## Screenshots
+
+|         | Light                                                            | Dark                                                           |
+| ------- | ---------------------------------------------------------------- | -------------------------------------------------------------- |
+| Desktop | ![Home, light, desktop](docs/screenshots/home-light-desktop.png) | ![Home, dark, desktop](docs/screenshots/home-dark-desktop.png) |
+| Desktop | ![Game, light, desktop](docs/screenshots/game-light-desktop.png) | ![Game, dark, desktop](docs/screenshots/game-dark-desktop.png) |
+| Mobile  | ![Home, light, mobile](docs/screenshots/home-light-mobile.png)   | ![Home, dark, mobile](docs/screenshots/home-dark-mobile.png)   |
+| Mobile  | ![Game, light, mobile](docs/screenshots/game-light-mobile.png)   | ![Game, dark, mobile](docs/screenshots/game-dark-mobile.png)   |
 
 ## Stack
 
-- React 19, React Router 7 (`react-router`), Vite 8.
-- CSS Modules + design tokens (`oklch`, modo claro/oscuro automático).
-- GraphQL con `fetch` propio (sin Apollo); datos de ejemplo en el navegador como alternativa.
-- Vitest + Testing Library + jsdom; ESLint 9 (flat config, `jsx-a11y`); Prettier 3.
-- PropTypes en todos los componentes (validados por ESLint).
+- React 19, React Router 7 and Vite 8.
+- CSS Modules with design tokens in `oklch`. Light and dark mode follow your system.
+- GraphQL calls go through a small `fetch` layer. I removed Apollo.
+- Vitest, Testing Library and jsdom for tests. ESLint 9 with `jsx-a11y`, and Prettier 3.
+- PropTypes on every component, checked by ESLint.
 
-## Requisitos
+## What you need
 
-- Node.js 20.19 o superior (probado con Node 24) y npm.
-- Opcional: Docker, para levantar el backend.
+Node.js 20.19 or newer (I use Node 24) and npm. You only need Docker if you want to run the backend.
 
-## Inicio rápido (sin backend)
+## Quick start (no backend)
 
 ```bash
 git clone https://github.com/diegomottadev/memo-test
@@ -37,11 +38,11 @@ npm install
 npm run dev
 ```
 
-Abrí http://localhost:5173. Sin `VITE_API_URL`, la app usa los datos de ejemplo y lo avisa con un cartel "Demo mode".
+Open http://localhost:5173. With no `VITE_API_URL`, the app uses sample data and shows a "Demo mode" message.
 
-## Con el backend real
+## With the real backend
 
-1. Levantá el backend (un solo comando, ver su README):
+1. Start the backend. It's 1 command (more in its README):
 
    ```bash
    git clone https://github.com/diegomottadev/api-memo-test
@@ -49,143 +50,156 @@ Abrí http://localhost:5173. Sin `VITE_API_URL`, la app usa los datos de ejemplo
    docker compose up -d
    ```
 
-   La primera vez tarda unos minutos (instala dependencias, crea la base y carga datos). Queda en http://localhost:82/graphql.
+   The first start takes a few minutes, because it installs packages, creates the database and adds sample data. Then the API answers at http://localhost:82/graphql.
 
-2. En este repo, configurá la URL y arrancá:
+2. Point the frontend to it and start it:
 
    ```bash
    cp .env.example .env.local   # VITE_API_URL=http://localhost:82/graphql
    npm run dev
    ```
 
-### De dónde salen los datos
+### Where the data comes from
 
-| Situación                                      | Qué hace la app                                                               |
-| ---------------------------------------------- | ----------------------------------------------------------------------------- |
-| `VITE_API_URL` vacía o sin definir             | Usa los datos de ejemplo desde el inicio.                                     |
-| `VITE_API_URL` definida y el servidor responde | Usa el backend.                                                               |
-| El servidor no responde                        | Pasa sola a los datos de ejemplo, repite la operación ahí y muestra un aviso. |
+| Case                                         | What the app does                                                         |
+| -------------------------------------------- | ------------------------------------------------------------------------- |
+| `VITE_API_URL` is empty                      | Uses sample data from the start.                                          |
+| `VITE_API_URL` is set and the server answers | Uses the backend.                                                         |
+| The server stops answering                   | Switches to sample data, runs the same request there and shows a message. |
 
-"No responde" significa: error de red, más de 5 segundos sin respuesta, un status HTTP de error o una respuesta que no es JSON. Un error GraphQL (el servidor respondió, pero con un error) se muestra como error y no activa el cambio. Una vez que cambió, la app sigue con los datos de ejemplo hasta recargar la página, para no mezclar datos de los dos lados.
+"Stops answering" means a network error, no answer after 5 seconds, an HTTP error status or an answer that isn't JSON.
 
-Los datos de ejemplo (y sus puntajes) se guardan en el `localStorage` del navegador.
+A GraphQL error is a different case. The server did answer, so the app shows the error and keeps using the server.
 
-## Comandos
+After the switch, the app stays on sample data until you reload the page. I did it this way so data from the 2 sources never gets mixed.
 
-| Comando           | Qué hace                                                         |
-| ----------------- | ---------------------------------------------------------------- |
-| `npm run dev`     | Servidor de desarrollo en http://localhost:5173.                 |
-| `npm run build`   | Build de producción en `dist/`.                                  |
-| `npm run preview` | Sirve `dist/` para probar el build.                              |
-| `npm test`        | Tests una vez (`npm run test:watch` para modo watch).            |
-| `npm run lint`    | ESLint.                                                          |
-| `npm run format`  | Formatea todo con Prettier (`npm run format:check` solo revisa). |
-| `npm run deploy`  | Publica en GitHub Pages (ver abajo).                             |
+Sample data and its scores live in your browser's `localStorage`.
 
-Antes de subir cambios: `npm test && npm run lint && npm run format:check && npm run build`.
+## Commands
 
-## Cómo se juega
+| Command           | What it does                                                           |
+| ----------------- | ---------------------------------------------------------------------- |
+| `npm run dev`     | Dev server at http://localhost:5173.                                   |
+| `npm run build`   | Production build in `dist/`.                                           |
+| `npm run preview` | Serves `dist/`, so you can try the build.                              |
+| `npm test`        | Runs the tests once (`npm run test:watch` keeps them running).         |
+| `npm run lint`    | ESLint.                                                                |
+| `npm run format`  | Formats everything with Prettier (`npm run format:check` only checks). |
+| `npm run deploy`  | Publishes to GitHub Pages (see below).                                 |
 
-1. Elegí un memo test y tocá **Start** (o **Continue** si tenés una partida a medias).
-2. Dá vuelta una carta y después otra. Si muestran la misma imagen, quedan boca arriba; si no, se dan vuelta solas al segundo.
-3. Encontrá todos los pares. Puntaje = cartas ÷ clicks × 100 (cada click en una carta cuenta).
+Before you push:
 
-También se juega con teclado (Tab para moverse, Enter para dar vuelta) y con lector de pantalla: cada carta dice su estado y cada jugada se anuncia ("Pair found! Dog.").
+```bash
+npm test && npm run lint && npm run format:check && npm run build
+```
 
-## Estructura
+## How to play
+
+1. Pick a memo test and press **Start**. If you left a game halfway, press **Continue**.
+2. Turn over a card, then another one. If both show the same picture, they stay face up. If they don't, they turn back after 1 second.
+3. Find all the pairs. Score = cards ÷ clicks × 100, and every click on a card counts.
+
+You can also play with the keyboard (Tab to move, Enter to turn a card) and with a screen reader. Each card says what it shows, and each move is read out loud ("Pair found! Dog.").
+
+## Project structure
 
 ```
 src/
-  api/          única capa que hace fetch: graphqlRequest, memoTestApi (GraphQL), mocks/, createApi (fallback)
-  hooks/        useAsync (lecturas), useAsyncAction (escrituras), useMemoGame, useDataSource, useFocusOnMount
-  hocs/         withAsyncState (cargando/error/vacío), withErrorBoundary
-  components/   <Nombre>/<Nombre>.jsx + <Nombre>.module.css + index.js (presentacionales, con propTypes)
+  api/          the only code that calls fetch: graphqlRequest, memoTestApi (GraphQL), mocks/, createApi (switch to sample data)
+  hooks/        useAsync (reads), useAsyncAction (writes), useMemoGame, useDataSource, useFocusOnMount
+  hocs/         withAsyncState (loading, error and empty screens), withErrorBoundary
+  components/   <Name>/<Name>.jsx + <Name>.module.css + index.js (they only get props, with propTypes)
   pages/        Home, GameSession (+ GamePlay), NotFound
-  constants/    config, rutas, juego, claves de localStorage, links, stats, pasos de ayuda
-  styles/       tokens.css (diseño) y base.css (reset)
-  types/        PropTypes compartidos
-  utils/        reglas del juego (funciones puras), localStorage seguro, títulos
-  testUtils/    renderWithProviders, mock de la API, setup de tests
+  constants/    config, routes, game, localStorage keys, links, stats, help steps
+  styles/       tokens.css (design) and base.css (reset)
+  types/        shared PropTypes
+  utils/        game rules (pure functions), safe localStorage, page titles
+  testUtils/    renderWithProviders, API mock, test setup
 scripts/deploy.sh
 docs/screenshots/
 ```
 
-Convenciones principales:
+The rules I follow:
 
-- Solo las páginas (y sus hooks) tienen estado; los componentes reciben props.
-- Opciones configurables en arrays de `constants/` (links, stats, pasos de ayuda): agregar una opción es agregar un objeto.
-- Ningún color o tamaño literal fuera de `src/styles/tokens.css`.
-- Todo el texto del código (UI, comentarios, tests) en inglés simple; JSDoc en todo lo exportado.
-- Tests al lado del código (`*.test.js(x)`), con queries por rol/label/texto y la capa `api/` mockeada con `vi.mock`.
+- Only pages (and their hooks) keep state. Components get props.
+- Options you can change live in arrays in `constants/` (links, stats, help steps). To add one, add an object.
+- Colors and sizes come from `src/styles/tokens.css`. Nothing else has literal values.
+- All text in the code (UI, comments, tests) is simple English, with JSDoc on everything exported.
+- Tests sit next to the code (`*.test.js(x)`). They find elements by role, label or text, and they mock the `api/` layer with `vi.mock`.
 
-## Deploy a GitHub Pages
+## Deploy to GitHub Pages
 
 ```bash
-DRY_RUN=1 npm run deploy   # muestra qué se publicaría, sin commit ni push
-npm run deploy             # build y publica en la rama gh-pages
+DRY_RUN=1 npm run deploy   # shows what it would publish, with no commit and no push
+npm run deploy             # builds and publishes to the gh-pages branch
 ```
 
-El script (`scripts/deploy.sh`):
+`scripts/deploy.sh` builds with the base path `/<repo name>/` and with no API URL, so the site uses sample data.
 
-- Hace el build con base `/<nombre del repo>/` y **sin URL de API** (datos de ejemplo). Para apuntar a un backend público: `DEPLOY_API_URL=https://... npm run deploy`; si ese servidor no responde, la app cambia sola a los datos de ejemplo.
-- Prepara la rama `gh-pages` en un worktree temporal (la crea la primera vez), agrega `.nojekyll`, hace commit con tu usuario de git y push **sin** `--force`.
+To use a public backend, run `DEPLOY_API_URL=https://... npm run deploy`. If that server doesn't answer, the app switches to sample data by itself.
 
-La primera vez, en GitHub: **Settings → Pages → Deploy from a branch → `gh-pages` / root**.
+Then the script puts the build on the `gh-pages` branch from a temporary worktree (it creates the branch the first time). It adds `.nojekyll`, commits with your git user and pushes without `--force`.
 
-`dev`, `build` y `preview` locales sirven desde `/`; solo el deploy usa el subpath.
+The first time, go to GitHub **Settings → Pages → Deploy from a branch → `gh-pages` / root**.
 
-## Decisiones
+Local `dev`, `build` and `preview` serve the app from `/`. Only the deploy uses the subfolder.
 
-- **Sin Apollo.** Son 5 operaciones simples y no se usaba la caché; un `fetch` propio en `api/` permite inyectar `baseUrl`/`fetchImpl` en tests, cancelar con `AbortController` y decidir el fallback. El bundle bajó de ~465 KB a ~285 KB.
-- **`404.html` en lugar de `HashRouter`.** Pages no tiene rutas del lado del servidor; el build copia `index.html` a `404.html`, así un link directo (`/memo-test/game/1/...`) carga la app y `BrowserRouter` resuelve la ruta. Las URLs quedan limpias. Costo: el primer pedido a una ruta profunda responde HTTP 404 aunque la página se vea bien.
-- **HOCs para estados de render, hooks para lógica.** `withAsyncState` y `withErrorBoundary` resuelven lo que se repetía en cada pantalla; el estado de la partida y las llamadas viven en hooks.
-- **La partida guardada en el navegador es la fuente de verdad para "Continue"**; el backend recibe el progreso en cada par encontrado y el puntaje final.
-- **Interfaz en inglés simple**, como el resto del código.
+## Decisions
 
-## Limitaciones conocidas
+**I removed Apollo.** The app has 5 simple operations and never used the cache. A small `fetch` layer in `api/` lets tests inject `baseUrl` and `fetchImpl`, cancels requests with `AbortController` and decides when to switch to sample data. The bundle went from about 465 KB to about 285 KB.
 
-- El backend tiene `endGameSession` en el schema pero sin implementación: las sesiones nunca pasan a `Completed`; solo se guarda el puntaje.
-- El "Best score" del backend incluye partidas sin terminar (puntaje 0), por eso puede mostrar `Best score: 0`.
-- El backend no tiene descripción de las imágenes: para lectores de pantalla se llaman "Picture 1", "Picture 2"… (los datos de ejemplo sí tienen nombres).
-- Las imágenes del backend son links a sitios de terceros; si alguno se cae, esa carta se ve rota.
-- Después de cambiar a datos de ejemplo, la app no vuelve a intentar con el servidor hasta recargar.
-- No hay usuarios: los puntajes son globales (backend) o de este navegador (datos de ejemplo).
+Deep links use `404.html`. GitHub Pages can't route on the server, so the build copies `index.html` to `404.html`. A direct link like `/memo-test/game/1/...` loads the app, and `BrowserRouter` shows the right page. I picked this over `HashRouter` to keep URLs clean. The cost is small: the first request to a deep link gets an HTTP 404 status, even though the page looks fine.
 
-## Pendiente: checklist para seguir aprendiendo
+HOCs handle render states and hooks handle logic. `withAsyncState` and `withErrorBoundary` draw the loading, error and empty screens that every page used to repeat. Game state and API calls live in hooks.
 
-Tareas ordenadas por dificultad para quien retome el proyecto. Cada una dice dónde mirar y qué se practica. Antes de dar una por terminada: `npm test && npm run lint && npm run format:check && npm run build`, y un test nuevo que la cubra.
+The game saved in your browser decides what "Continue" shows. The backend gets the progress after each pair and the final score at the end.
 
-### Nivel inicial
+## Known limits
 
-- [ ] **Agregar un memo test a los datos de ejemplo.** Dónde: `src/api/mocks/fixtures.js`. Practicás: el modelo de datos que usa toda la UI.
-- [ ] **Agregar un paso a la ayuda o una estadística nueva** (por ejemplo, porcentaje de aciertos). Dónde: `src/constants/howToPlay.js`, `src/constants/stats.js`. Practicás: configuración por arrays sin tocar componentes.
-- [ ] **Ocultar "Best score" cuando vale 0.** Dónde: `src/components/MemoTestItem/`. Practicás: render condicional y su test.
-- [ ] **Sumar una variante `danger` a `Button`.** Dónde: `src/components/Button/`, `src/styles/tokens.css`. Practicás: tokens, CSS Modules y contraste AA en los dos modos.
-- [ ] **Escribir los tests que faltan** de `GameStats`, `EmptyState` y `MemoTestList`. Dónde: junto a cada componente. Practicás: Testing Library con queries por rol y texto.
+- The backend schema has `endGameSession`, but there's no code behind it. Sessions never reach `Completed`, and only the score is saved.
+- The backend's "Best score" counts unfinished games (score 0), so you can see `Best score: 0`.
+- The backend has no text for its pictures. Screen readers hear "Picture 1", "Picture 2" and so on. (Sample data has real names.)
+- Backend pictures are links to other websites. If one of those sites goes down, that card shows a broken image.
+- After switching to sample data, the app doesn't try the server again until you reload.
+- There are no user accounts. Scores are global on the backend, or per browser with sample data.
 
-### Nivel intermedio
+## To do: a checklist for learning
 
-- [ ] **Cronómetro de partida** que se guarde al continuar. Dónde: `src/hooks/useMemoGame.js`, `src/utils/game.js`. Practicás: estado derivado, timers con limpieza y tests con `vi.useFakeTimers`.
-- [ ] **Botón "Abandonar partida"** que borre la partida guardada. Dónde: `src/pages/GameSession/`, `src/utils/gameStorage.js`. Practicás: flujo de navegación y localStorage.
-- [ ] **Elegir la cantidad de pares** (dificultad). Dónde: `src/utils/game.js` (`createDeck`). Practicás: funciones puras y sus tests.
-- [ ] **Volver al servidor sin recargar** cuando responde de nuevo (hoy el modo demo dura hasta recargar). Dónde: `src/api/createApi.js`, `src/components/DataSourceNotice/`. Practicás: un store externo con `useSyncExternalStore`.
-- [ ] **Animación de "par encontrado"** que respete `prefers-reduced-motion`. Dónde: `src/components/Card/`. Practicás: CSS y accesibilidad.
-- [ ] **Tests end-to-end versionados con Playwright**, con auditoría de axe-core. Durante la modernización estas pruebas se hicieron con scripts temporales que no quedaron en el repo. Practicás: pruebas en un navegador real.
-- [ ] **CI con GitHub Actions:** tests, lint, formato y build en cada Pull Request; deploy a Pages al mergear a `main`. Practicás: automatización.
+Tasks sorted by level, for whoever picks up this project next. Each one says where to look and what you'll learn.
 
-### Nivel avanzado
+Before you tick a box, run `npm test && npm run lint && npm run format:check && npm run build`, and add a test for your change.
 
-- [ ] **Migrar a TypeScript.** Los `@typedef` de JSDoc (`Card`, `Game`, `MemoTest`) son el punto de partida. Practicás: tipos y migración gradual.
-- [ ] **Separar el código por ruta** con `React.lazy` y medir el bundle. Practicás: rendimiento.
-- [ ] **Interfaz en dos idiomas** (inglés y español) con un diccionario de textos. Practicás: i18n.
-- [ ] **Modo offline (PWA)** con service worker; encaja con el modo demo. Practicás: caché y ciclo de vida del service worker.
-- [ ] **Reemplazar `useAsync` por TanStack Query** y comparar el código. Practicás: caché de datos del servidor.
-- [ ] **Usuarios y ranking** (junto con el backend). Practicás: autenticación de punta a punta.
+### Beginner
 
-### Necesitan cambios en el backend
+- [ ] **Add a memo test to the sample data.** Where: `src/api/mocks/fixtures.js`. You'll learn: the data model the whole UI uses.
+- [ ] **Add a help step or a new stat** (for example, hit rate). Where: `src/constants/howToPlay.js`, `src/constants/stats.js`. You'll learn: how config arrays change the UI with no changes to components.
+- [ ] **Hide "Best score" when it's 0.** Where: `src/components/MemoTestItem/`. You'll learn: conditional rendering and its test.
+- [ ] **Add a `danger` variant to `Button`.** Where: `src/components/Button/`, `src/styles/tokens.css`. You'll learn: tokens, CSS Modules and how to check AA contrast in both color modes.
+- [ ] **Write the missing tests** for `GameStats`, `EmptyState` and `MemoTestList`. Where: next to each component. You'll learn: Testing Library queries by role and text.
 
-Ver el checklist de [api-memo-test](https://github.com/diegomottadev/api-memo-test#pendiente-checklist-para-seguir-aprendiendo).
+### Intermediate
 
-- [ ] Marcar la partida como `Completed` al terminar, cuando exista `endGameSession`.
-- [ ] Mostrar descripciones reales de las imágenes (hoy "Picture 1", "Picture 2"…) cuando el backend las devuelva.
-- [ ] Publicar el backend con HTTPS y desplegar el frontend con `DEPLOY_API_URL`, para que la demo use datos reales.
+- [ ] **A game timer** that survives "Continue". Where: `src/hooks/useMemoGame.js`, `src/utils/game.js`. You'll learn: derived state, timers with cleanup and tests with `vi.useFakeTimers`.
+- [ ] **A "Quit game" button** that deletes the saved game. Where: `src/pages/GameSession/`, `src/utils/gameStorage.js`. You'll learn: navigation and `localStorage`.
+- [ ] **Pick the number of pairs** (difficulty). Where: `createDeck` in `src/utils/game.js`. You'll learn: pure functions and how to test them.
+- [ ] **Go back to the server without a reload** when it answers again. Today demo mode lasts until you reload. Where: `src/api/createApi.js`, `src/components/DataSourceNotice/`. You'll learn: an external store with `useSyncExternalStore`.
+- [ ] **A "pair found" animation** that respects `prefers-reduced-motion`. Where: `src/components/Card/`. You'll learn: CSS animation and accessibility.
+- [ ] **End-to-end tests with Playwright**, plus an axe-core check. I ran these checks with throwaway scripts during the upgrade, and they aren't in the repo. You'll learn: testing in a real browser.
+- [ ] **CI with GitHub Actions**: tests, lint, format and build on every pull request, and a deploy to Pages after each merge to `main`. You'll learn: automation.
+
+### Advanced
+
+- [ ] **Move to TypeScript.** The JSDoc `@typedef`s (`Card`, `Game`, `MemoTest`) are a good place to start. You'll learn: types and a step-by-step migration.
+- [ ] **Split the code by route** with `React.lazy`, and measure the bundle before and after. You'll learn: load performance.
+- [ ] **A UI in 2 languages** (English and Spanish) with a dictionary of texts. You'll learn: i18n.
+- [ ] **Offline mode (PWA)** with a service worker. It fits well with demo mode. You'll learn: caching and the service worker life cycle.
+- [ ] **Swap `useAsync` for TanStack Query** and compare the code. You'll learn: caching server data.
+- [ ] **Users and a ranking**, together with the backend. You'll learn: login from end to end.
+
+### Needs backend work first
+
+See the checklist in [api-memo-test](https://github.com/diegomottadev/api-memo-test#to-do-a-checklist-for-learning).
+
+- [ ] Mark the game as `Completed` at the end, once `endGameSession` works.
+- [ ] Show real picture names (today "Picture 1", "Picture 2"...) once the backend sends them.
+- [ ] Put the backend online with HTTPS and deploy the frontend with `DEPLOY_API_URL`, so the demo uses real data.

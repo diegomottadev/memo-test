@@ -151,14 +151,41 @@ La primera vez, en GitHub: **Settings → Pages → Deploy from a branch → `gh
 - Después de cambiar a datos de ejemplo, la app no vuelve a intentar con el servidor hasta recargar.
 - No hay usuarios: los puntajes son globales (backend) o de este navegador (datos de ejemplo).
 
-## Pendiente
+## Pendiente: checklist para seguir aprendiendo
 
-- [ ] Implementar `endGameSession` en el backend y marcar las sesiones como `Completed`.
-- [ ] Excluir partidas sin terminar del "Best score".
-- [ ] Guardar descripciones (texto alternativo) de las imágenes en el backend.
-- [ ] Imágenes propias en el backend en lugar de links externos.
-- [ ] CI con GitHub Actions: tests, lint, formato, build y deploy automático.
-- [ ] Tests end-to-end versionados (por ejemplo Playwright) y auditoría de accesibilidad automática.
-- [ ] Reintentar contra el servidor sin recargar cuando vuelve a responder.
-- [ ] Usuarios y ranking.
-- [ ] Actualizar el backend a una versión de Laravel y PHP con soporte.
+Tareas ordenadas por dificultad para quien retome el proyecto. Cada una dice dónde mirar y qué se practica. Antes de dar una por terminada: `npm test && npm run lint && npm run format:check && npm run build`, y un test nuevo que la cubra.
+
+### Nivel inicial
+
+- [ ] **Agregar un memo test a los datos de ejemplo.** Dónde: `src/api/mocks/fixtures.js`. Practicás: el modelo de datos que usa toda la UI.
+- [ ] **Agregar un paso a la ayuda o una estadística nueva** (por ejemplo, porcentaje de aciertos). Dónde: `src/constants/howToPlay.js`, `src/constants/stats.js`. Practicás: configuración por arrays sin tocar componentes.
+- [ ] **Ocultar "Best score" cuando vale 0.** Dónde: `src/components/MemoTestItem/`. Practicás: render condicional y su test.
+- [ ] **Sumar una variante `danger` a `Button`.** Dónde: `src/components/Button/`, `src/styles/tokens.css`. Practicás: tokens, CSS Modules y contraste AA en los dos modos.
+- [ ] **Escribir los tests que faltan** de `GameStats`, `EmptyState` y `MemoTestList`. Dónde: junto a cada componente. Practicás: Testing Library con queries por rol y texto.
+
+### Nivel intermedio
+
+- [ ] **Cronómetro de partida** que se guarde al continuar. Dónde: `src/hooks/useMemoGame.js`, `src/utils/game.js`. Practicás: estado derivado, timers con limpieza y tests con `vi.useFakeTimers`.
+- [ ] **Botón "Abandonar partida"** que borre la partida guardada. Dónde: `src/pages/GameSession/`, `src/utils/gameStorage.js`. Practicás: flujo de navegación y localStorage.
+- [ ] **Elegir la cantidad de pares** (dificultad). Dónde: `src/utils/game.js` (`createDeck`). Practicás: funciones puras y sus tests.
+- [ ] **Volver al servidor sin recargar** cuando responde de nuevo (hoy el modo demo dura hasta recargar). Dónde: `src/api/createApi.js`, `src/components/DataSourceNotice/`. Practicás: un store externo con `useSyncExternalStore`.
+- [ ] **Animación de "par encontrado"** que respete `prefers-reduced-motion`. Dónde: `src/components/Card/`. Practicás: CSS y accesibilidad.
+- [ ] **Tests end-to-end versionados con Playwright**, con auditoría de axe-core. Durante la modernización estas pruebas se hicieron con scripts temporales que no quedaron en el repo. Practicás: pruebas en un navegador real.
+- [ ] **CI con GitHub Actions:** tests, lint, formato y build en cada Pull Request; deploy a Pages al mergear a `main`. Practicás: automatización.
+
+### Nivel avanzado
+
+- [ ] **Migrar a TypeScript.** Los `@typedef` de JSDoc (`Card`, `Game`, `MemoTest`) son el punto de partida. Practicás: tipos y migración gradual.
+- [ ] **Separar el código por ruta** con `React.lazy` y medir el bundle. Practicás: rendimiento.
+- [ ] **Interfaz en dos idiomas** (inglés y español) con un diccionario de textos. Practicás: i18n.
+- [ ] **Modo offline (PWA)** con service worker; encaja con el modo demo. Practicás: caché y ciclo de vida del service worker.
+- [ ] **Reemplazar `useAsync` por TanStack Query** y comparar el código. Practicás: caché de datos del servidor.
+- [ ] **Usuarios y ranking** (junto con el backend). Practicás: autenticación de punta a punta.
+
+### Necesitan cambios en el backend
+
+Ver el checklist de [api-memo-test](https://github.com/diegomottadev/api-memo-test#pendiente-checklist-para-seguir-aprendiendo).
+
+- [ ] Marcar la partida como `Completed` al terminar, cuando exista `endGameSession`.
+- [ ] Mostrar descripciones reales de las imágenes (hoy "Picture 1", "Picture 2"…) cuando el backend las devuelva.
+- [ ] Publicar el backend con HTTPS y desplegar el frontend con `DEPLOY_API_URL`, para que la demo use datos reales.

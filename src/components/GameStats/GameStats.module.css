@@ -1,0 +1,23 @@
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2) var(--space-5);
+  margin: 0;
+}
+
+.stat {
+  display: flex;
+  gap: var(--space-2);
+  align-items: baseline;
+}
+
+.label {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.value {
+  margin: 0;
+  font-weight: var(--font-weight-bold);
+}

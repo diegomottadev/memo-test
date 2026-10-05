@@ -1,0 +1,23 @@
+/* Same layout as MemoTestList/MemoTestItem, so nothing moves when the data loads. */
+.list {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+}
+
+.info {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-2);
+}

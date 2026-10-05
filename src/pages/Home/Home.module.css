@@ -1,0 +1,8 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  margin-inline: auto;
+  max-width: var(--content-width-narrow);
+  text-align: center;
+}

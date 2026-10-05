@@ -1,0 +1,128 @@
+/*
+ * Design tokens. Every color, size, radius, duration and shadow in the app
+ * comes from here; component styles must not use literal values.
+ * Light mode is the default: the dark-mode block redefines color tokens only,
+ * and the reduced-motion block redefines duration tokens only.
+ * Text/background pairs meet WCAG AA (4.5:1) in both color schemes.
+ */
+:root {
+  color-scheme: light dark;
+
+  /* Colors (light mode) */
+  --color-bg: oklch(0.97 0.005 260);
+  --color-surface: oklch(1 0 0);
+  --color-text: oklch(0.25 0.02 260);
+  --color-text-muted: oklch(0.45 0.02 260);
+  --color-border: oklch(0.88 0.01 260);
+  --color-border-strong: oklch(0.55 0.02 260);
+  --color-primary: oklch(0.48 0.1 270);
+  --color-primary-hover: oklch(0.42 0.1 270);
+  --color-on-primary: oklch(1 0 0);
+  --color-secondary: oklch(0.92 0.02 270);
+  --color-secondary-hover: oklch(0.87 0.03 270);
+  --color-accent: oklch(0.5 0.19 25);
+  --color-danger: oklch(0.5 0.19 25);
+  --color-focus: oklch(0.55 0.2 260);
+  --color-card-back: oklch(0.35 0.06 270);
+  --color-on-card-back: oklch(0.97 0 0);
+  --color-card-border: oklch(0.55 0.08 270);
+  --color-card-face: oklch(1 0 0);
+  --color-shadow: oklch(0.2 0.02 260 / 0.15);
+  --color-skeleton: oklch(0.9 0.01 260);
+  --color-skeleton-highlight: oklch(0.95 0.005 260);
+
+  /* Typography: sizes grow with the screen, from a mobile minimum to a desktop maximum */
+  --font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-family-serif: Georgia, 'Times New Roman', serif;
+  --font-size-sm: clamp(0.875rem, 0.84rem + 0.15vw, 0.95rem);
+  --font-size-md: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+  --font-size-lg: clamp(1.125rem, 1.05rem + 0.4vw, 1.375rem);
+  --font-size-xl: clamp(1.5rem, 1.3rem + 1vw, 2rem);
+  --font-size-2xl: clamp(1.875rem, 1.5rem + 1.8vw, 2.75rem);
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+
+  /* Radii, borders and focus ring */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.75rem;
+  --radius-full: 999px;
+  --border-width: 1px;
+  --border-width-thick: 3px;
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 2px;
+
+  /* Sizes */
+  --min-target: 44px; /* Minimum size of anything clickable (WCAG 2.5.5). */
+  --content-width-narrow: 36rem;
+  --content-width-wide: 60rem;
+  --board-max-width: 36rem;
+  --card-min-width: clamp(4.5rem, 18vw, 7rem);
+  --card-aspect-ratio: 2 / 3;
+  --icon-size: 1.5rem;
+  --shadow-md: 0 var(--space-1) var(--space-3) var(--color-shadow);
+
+  /* Motion */
+  --opacity-disabled: 0.6;
+  --card-perspective: 60rem;
+
+  --duration-fast: 150ms;
+  --duration-flip: 500ms;
+  --duration-shimmer: 1.4s;
+
+  --skeleton-text-width: 60%;
+  --skeleton-button-width: 7rem;
+
+  /*
+   * Reference breakpoints. Custom properties do not work inside @media, so
+   * layouts use grids that adapt by themselves (auto-fill/minmax) and clamp()
+   * instead of width media queries.
+   */
+  --bp-sm: 40rem;
+  --bp-md: 48rem;
+  --bp-lg: 64rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: oklch(0.32 0.02 260);
+    --color-surface: oklch(0.27 0.02 260);
+    --color-text: oklch(0.97 0.003 260);
+    --color-text-muted: oklch(0.8 0.015 260);
+    --color-border: oklch(0.42 0.02 260);
+    --color-border-strong: oklch(0.65 0.02 260);
+    --color-primary: oklch(0.5 0.09 270);
+    --color-primary-hover: oklch(0.45 0.09 270);
+    --color-on-primary: oklch(1 0 0);
+    --color-secondary: oklch(0.4 0.03 270);
+    --color-secondary-hover: oklch(0.45 0.03 270);
+    --color-accent: oklch(0.77 0.13 25);
+    --color-danger: oklch(0.77 0.13 25);
+    --color-focus: oklch(0.8 0.13 230);
+    --color-card-back: oklch(0.22 0.02 260);
+    --color-on-card-back: oklch(0.97 0 0);
+    --color-card-border: oklch(0.9 0.01 260);
+    --color-card-face: oklch(0.97 0 0);
+    --color-shadow: oklch(0 0 0 / 0.35);
+    --color-skeleton: oklch(0.38 0.02 260);
+    --color-skeleton-highlight: oklch(0.44 0.02 260);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-flip: 0ms;
+    --duration-shimmer: 0ms;
+  }
+}

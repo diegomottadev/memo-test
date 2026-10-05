@@ -1,0 +1,11 @@
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: var(--border-width) solid var(--color-danger);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  text-align: center;
+}

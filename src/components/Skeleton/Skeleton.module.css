@@ -1,0 +1,48 @@
+.skeleton {
+  display: block;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(
+    90deg,
+    var(--color-skeleton) 0%,
+    var(--color-skeleton-highlight) 50%,
+    var(--color-skeleton) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer var(--duration-shimmer) ease-in-out infinite;
+}
+
+.title {
+  width: var(--skeleton-text-width);
+  height: var(--font-size-xl);
+}
+
+.text {
+  width: var(--skeleton-text-width);
+  height: var(--font-size-md);
+}
+
+.button {
+  width: var(--skeleton-button-width);
+  height: var(--min-target);
+}
+
+.card {
+  width: 100%;
+  aspect-ratio: var(--card-aspect-ratio);
+  border-radius: var(--radius-md);
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}

@@ -1,0 +1,70 @@
+/*
+ * 3D flip: `.inner` rotates and both faces hide their back side, so the front
+ * is drawn the right way round (the old card had one face and showed the image backwards).
+ */
+.card {
+  display: block;
+  width: 100%;
+  aspect-ratio: var(--card-aspect-ratio);
+  padding: 0;
+  border: 0;
+  background: none;
+  perspective: var(--card-perspective);
+  cursor: pointer;
+}
+
+.faceUp {
+  cursor: default;
+}
+
+.card:focus-visible .face {
+  border-color: var(--color-focus);
+}
+
+.inner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform var(--duration-flip) ease;
+}
+
+.faceUp .inner {
+  transform: rotateY(180deg);
+}
+
+.face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: var(--border-width-thick) solid var(--color-card-border);
+  border-radius: var(--radius-md);
+  backface-visibility: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.back {
+  background-color: var(--color-card-back);
+  color: var(--color-on-card-back);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+}
+
+.front {
+  background-color: var(--color-card-face);
+  transform: rotateY(180deg);
+}
+
+.matched .front {
+  border-color: var(--color-primary);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

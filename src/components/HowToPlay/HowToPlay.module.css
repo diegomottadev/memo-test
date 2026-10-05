@@ -1,0 +1,58 @@
+.box {
+  width: 100%;
+  max-width: var(--board-max-width);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  text-align: start;
+}
+
+.summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--min-target);
+  padding-inline: var(--space-4);
+  font-weight: var(--font-weight-bold);
+  list-style: none;
+  cursor: pointer;
+}
+
+/* `display: flex` hides the native arrow, so we draw our own open/closed sign. */
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary::after {
+  content: '+' / '';
+  margin-inline-start: auto;
+  font-size: var(--font-size-lg);
+}
+
+.box[open] .summary::after {
+  content: '−' / '';
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--font-size-sm);
+  font-style: italic;
+  font-family: var(--font-family-serif);
+}
+
+/* The steps keep the list numbers, which the global reset removes from lists. */
+.steps {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0 var(--space-4) var(--space-4) var(--space-6);
+  list-style: decimal;
+  color: var(--color-text-muted);
+}
